@@ -25,6 +25,8 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+checkpoints/
+pretrained_gpt2/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
