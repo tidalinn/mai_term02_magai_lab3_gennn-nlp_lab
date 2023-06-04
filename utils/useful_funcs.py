@@ -15,11 +15,11 @@ def get_url_data(url: str) -> list:
     soup = request_url(url)
     scrapped_text = []
     
-    h1 = soup.h1.text.strip().lower()
+    h1 = soup.h1.text.strip()
     p = soup.find_all('p')
     
     scrapped_text.append(h1)
-    scrapped_text.extend([p_i.text.strip().lower() for p_i in p])
+    scrapped_text.extend([p_i.text.strip() for p_i in p])
     
     return scrapped_text
 
@@ -29,9 +29,9 @@ def get_data(url: str) -> list:
     text = []
     
     text.extend([
-        soup.h1.text.strip().lower() + '.',
-        soup.h2.text.strip().lower() + '.',
-        soup.article.p.text.strip().lower()
+        soup.h1.text.strip() + '.',
+        soup.h2.text.strip() + '.',
+        soup.article.p.text.strip()
     ])
     
     url_chapters = [link.get('href') for link in soup.find_all('a', class_='link')]
@@ -40,7 +40,7 @@ def get_data(url: str) -> list:
         scrapped_text = get_url_data(url)
         text.extend(scrapped_text)
         
-    text = ' '.join(text)
+    text = ' '.join(text).lower()
     
     return text
 
@@ -84,3 +84,8 @@ def split_into_train_valid_test(text: str,
     
     else:
         print('Files already exist')
+        
+        
+def print_max_min_string(text: str) -> None:
+    print('Максимальная длина строки:', len(max(text.split('.'), key=len).split()))
+    print('Минимальная длина строки:', len(min(text.split('.'), key=len).split()))
