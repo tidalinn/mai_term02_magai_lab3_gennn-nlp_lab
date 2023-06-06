@@ -7,10 +7,17 @@ import os
 import re
 import tensorflow as tf
 from tensorflow import keras
+from tensorflow.data import TextLineDataset
+from keras.preprocessing import text
+from keras_nlp.tokenizers import word_piece_tokenizer
+from keras_nlp.layers import start_end_packer
 
 
-def split_into_sentences(text: str, regex: str = '[^а-яА-ЯёЁ0-9 -]') -> List[str]:
+'''LSTM bidirectional
+'''
+def split_into_sentences(text: str, regex: str = '[^а-яА-ЯёЁ0-9 ,-]') -> List[str]:
     sentences = [re.sub(regex, '', s).strip() for s in text.split('.')]
+    sentences = list(filter(None, sentences))
     return sentences
 
 
@@ -24,6 +31,8 @@ def train_test_split(text: list, test_size: float) -> Tuple[List[str], List[str]
     return train, test
 
 
+'''GPT architecture
+'''
 def train_valid_test_split_save(text: str,
                                 path_train: str,
                                 path_valid: str,
@@ -54,14 +63,16 @@ def train_valid_test_split_save(text: str,
     else:
         print('Files already exist')
         
-        
-def prepare_dataset(seq: tf.Tensor) -> Tuple[tf.Tensor, tf.Tensor]:
-    input_vector = seq[:-1]
-    target_vector = seq[1:]
-    return input_vector, target_vector
+
+def get_features_target(seq: tf.Tensor) -> Tuple[tf.Tensor, tf.Tensor]:
+    features = seq[:-1]
+    target = seq[1:]
+    return features, target
 
 
-def get_features(text: List[str], tokenizer: keras.preprocessing.text.Tokenizer) -> List[int]:
+'''LSTM bidirectional
+'''
+def get_features(text: List[str], tokenizer: text.Tokenizer) -> List[int]:
     features = []
 
     for line in text:

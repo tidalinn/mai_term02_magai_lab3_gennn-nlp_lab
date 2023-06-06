@@ -4,13 +4,17 @@ import random
 from tensorflow import keras
 
 
+'''Each notebook
+'''
 def print_total(text: str) -> None:
     print('Всего слов:', len(text.split()))
     
     if len(text.split('.')) != 1:
         print('Всего предложений:', len(text.split('.')))
         
-        
+
+'''LSTM bidirectional
+'''
 def print_tokenizer_vocabulary(tokenizer: keras.preprocessing.text.Tokenizer,
                                index: int = 10) -> List[tuple]:
     vocab_pairs = list(zip(
@@ -18,6 +22,8 @@ def print_tokenizer_vocabulary(tokenizer: keras.preprocessing.text.Tokenizer,
         list(tokenizer.word_index.values())[:index]
     ))
     return vocab_pairs
+
+
 
     
 def print_init_vector(text: str, vector: np.array, end: int = 100) -> None:
@@ -41,29 +47,37 @@ def print_single_batch(dataset: Dataset,
         print('Целевой признак:\n', ''.join(vocabulary[target]))
 '''
                               
-                              
+
+'''LSTM bidirectional | GPT architecture
+'''
 def print_single_element(features: np.ndarray, target: np.ndarray, vocabulary: dict) -> None:
+    vocab_dict = type(vocabulary) == dict
     random_id = random.choice(range(len(features)))
     
     features = features[random_id]
     target = target[random_id]
     
-    features_words = ' '.join(list(vocabulary[word] for word in features if word != 0))
-    target_id = np.argmax(target)
-    
+    if vocab_dict:
+        features_words = ' '.join(list(vocabulary[word] for word in features if word != 0))
+        target_id = np.argmax(target)
+        target_words = vocabulary[target_id]
+    else:
+        translation = lambda x: ' '.join(list(vocabulary(word) for word in x))
+        features_words = translation(features)
+        target_words = translation(target)
+
     print(f'Признаки {features.shape}:\n{features}\n')
     print(f'Перевод в текст:\n{features_words}\n')
-    
-    print(f'Целевой признак {target.shape}:\n{target_id}\n')
-    print(f'Перевод в текст:\n{vocabulary[target_id]}\n')
+
+    print(f'Целевой признак {target.shape}:\n{target_id if vocab_dict else target}\n')
+    print(f'Перевод в текст:\n{target_words}\n')
         
         
-def print_single_element_dimension(data) -> None:
-    random_id = random.choice(range(len(dataset)))
-    
-    for features, target in data.take(random_id):
-        print('Размерность признаков:', features.numpy().shape)
-        print('Размерность целевого признака:', target.numpy().shape)
+'''GPT architecture
+'''
+def print_max_min_len(text: List[str]) -> None:
+    print('Максимальная длина строки:', len(max(text, key=len).split()))
+    print('Минимальная длина строки:', len(min(text, key=len).split()))
 
 
 '''

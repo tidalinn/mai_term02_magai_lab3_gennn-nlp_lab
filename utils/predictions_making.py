@@ -2,10 +2,12 @@
 '''
 
 import numpy as np
+from typing import Tuple
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras.preprocessing import sequence
 from keras.preprocessing import text
+import keras_nlp
 
 
 def predict_next_character(sample: str,
@@ -41,6 +43,8 @@ def predict_next_character(sample: str,
     return generated
     
     
+'''LSTM bidirectional
+'''
 def predict_next_word(sample: str,
                       model: tf.keras.Sequential,
                       tokenizer: text.Tokenizer,
