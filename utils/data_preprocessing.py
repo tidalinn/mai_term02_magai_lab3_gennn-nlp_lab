@@ -64,6 +64,8 @@ def train_valid_test_split_save(text: str,
         print('Files already exist')
         
 
+'''RNN char
+'''
 def get_features_target(seq: tf.Tensor) -> Tuple[tf.Tensor, tf.Tensor]:
     features = seq[:-1]
     target = seq[1:]
