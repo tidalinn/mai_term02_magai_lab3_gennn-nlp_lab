@@ -23,8 +23,8 @@ def print_tokenizer_vocabulary(vocabulary: Dict[str, int], index: int = 10) -> L
     return vocab_pairs
 
 
-
-    
+'''LSTM word | LSTM char
+'''
 def print_init_vector(text: str, vector: np.array, end: int = 100) -> None:
     print('Исходный текст:\n', text[:end], '\n')
     print('Векторное представление:\n', vector[:end])
@@ -45,14 +45,16 @@ def print_single_batch(dataset: Dataset, vocabulary: Dict[str, int]) -> None:
         print('Целевой признак:\n', ''.join(vocabulary[target]))
                               
 
-'''LSTM bidirectional | GPT architecture | LSTM word
+'''LSTM bidirectional | GPT architecture | LSTM word | LSTM char
 '''
 def print_single_element(features: np.ndarray, 
                          target: np.ndarray, 
                          vocabulary: dict or Mapping, 
-                         take_random: bool = True) -> None:
+                         take_random: bool = True,
+                         char: bool = False) -> None:
     
-    translation_dict = lambda x: ' '.join(list(vocabulary[word] for word in x if word != 0))
+    space = '' if char else ' '
+    translation_dict = lambda x: space.join(list(vocabulary[word] for word in x if word != 0))
     translation_func = lambda x: ' '.join(list(vocabulary(word) for word in x))
     
     if take_random:
@@ -91,6 +93,13 @@ def print_single_element(features: np.ndarray,
 def print_single_dimension(features: np.ndarray, target: np.ndarray) -> None:
     print('Размерность признаков:', features.shape)
     print('Размерность целевого признака:', target.shape)
+    
+    
+'''GPT architecture
+'''
+def print_max_min_len(text: list) -> None:
+    print('Максимальная длина строки:', len(max(text)))
+    print('Минимальная длина строки:', len(min(text)))
 
 
 '''LSTM word

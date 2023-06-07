@@ -13,7 +13,7 @@ def predict_next(sample: str,
                  n_next: int,
                  temperature: float,
                  batch_size: int,
-                 word: False) -> str:
+                 word: bool = False) -> str:
     
     if word:
         sample_vector = [tokenizer[word] for word in sample.split()]
